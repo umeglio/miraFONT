@@ -13,6 +13,8 @@
 
 **🌐 [Live specimen & OLED simulator → umeglio.github.io/miraFONT](https://umeglio.github.io/miraFONT/)**
 
+*The site itself is set 100% in miraFONT — every heading, label and paragraph. / Il sito stesso è composto al 100% in miraFONT — ogni titolo, etichetta e paragrafo.*
+
 [English](#-english) · [Italiano](#-italiano)
 
 </div>
