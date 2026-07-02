@@ -10,6 +10,7 @@
 [![Formats](https://img.shields.io/badge/formats-OTF%20·%20TTF%20·%20WOFF-blue.svg)](fonts/)
 [![Cuts](https://img.shields.io/badge/cuts-21-orange.svg)](fonts/)
 [![ESP32 ready](https://img.shields.io/badge/ESP32-SSD1306%20OLED-green.svg)](esp32/)
+[![miraNET DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19402571.svg)](https://doi.org/10.5281/zenodo.19402571)
 
 **🌐 [Live specimen & OLED simulator → umeglio.github.io/miraFONT](https://umeglio.github.io/miraFONT/)**
 
@@ -28,6 +29,8 @@
 miraFONT is an original typeface designed for the **miraNET Digital Runtime**: every glyph is generated from a **5×7 node matrix**, with no third-party outlines. The same DNA that drives a 0.96" OLED display also produces a complete desktop and web font family.
 
 It is released under **[CC0 1.0 Universal](LICENSE)** (public domain dedication): you can use it, modify it, embed it and redistribute it **for any purpose, including commercial, with no attribution required**. It belongs to everyone.
+
+> ▶ **Coming up** — the **[miraNET Digital Runtime](https://doi.org/10.5281/zenodo.19402571)** is built on miraFONT: this is its native typeface. DOI: [10.5281/zenodo.19402571](https://doi.org/10.5281/zenodo.19402571)
 
 ### The family — 21 cuts × 3 formats
 
@@ -85,6 +88,8 @@ LICENSE                 CC0 1.0 Universal
 miraFONT è un carattere tipografico originale nato per il **miraNET Digital Runtime**: ogni glifo è generato da una **matrice di nodi 5×7**, senza outline di terze parti. Lo stesso DNA che pilota un display OLED da 0,96" produce anche una famiglia completa di font per desktop e web.
 
 È rilasciato con licenza **[CC0 1.0 Universal](LICENSE)** (dedica al pubblico dominio): puoi usarlo, modificarlo, incorporarlo e ridistribuirlo **per qualsiasi scopo, anche commerciale, senza obbligo di attribuzione**. È di tutti.
+
+> ▶ **In arrivo** — il **[miraNET Digital Runtime](https://doi.org/10.5281/zenodo.19402571)** è interamente basato su miraFONT: questa è la sua tipografia nativa. DOI: [10.5281/zenodo.19402571](https://doi.org/10.5281/zenodo.19402571)
 
 ### La famiglia — 21 tagli × 3 formati
 
