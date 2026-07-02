@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>miraFONT — Digital typography for a Digital Runtime</title>
+<meta name="description" content="miraFONT: an original CC0 (public domain) typeface built from a 5×7 node matrix. 21 cuts, 3 textures, desktop + web + ESP32 OLED. Free for everyone.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2303060f'/%3E%3Ctext x='8' y='12' font-size='11' text-anchor='middle' fill='%2338e1ff' font-family='monospace'%3Em%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="fonts/miraFONT.css">
+<style>
+  :root{
+    --bg:#03060f; --bg2:#070c1c; --panel:#0b1226; --line:#1a2547;
+    --cyan:#38e1ff; --amber:#ffb64a; --green:#5dff9e;
+    --txt:#dfe7ff; --dim:#8b98c4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6}
+  a{color:var(--cyan)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+
+  /* language switch */
+  .lang-switch{position:fixed;top:16px;right:16px;z-index:50;display:flex;gap:6px;background:rgba(11,18,38,.9);border:1px solid var(--line);border-radius:99px;padding:4px}
+  .lang-switch button{background:none;border:none;color:var(--dim);font:600 13px/1 inherit;padding:7px 14px;border-radius:99px;cursor:pointer}
+  .lang-switch button.on{background:var(--cyan);color:#04121a}
+
+  html[data-lang="it"] [lang-en]{display:none !important}
+  html[data-lang="en"] [lang-it]{display:none !important}
+
+  /* hero */
+  header{padding:110px 0 70px;text-align:center;background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, #10204d 0%, transparent 70%), var(--bg)}
+  .logo{font-family:'miraFONT Spline',monospace;font-size:clamp(52px,10vw,110px);color:var(--cyan);
+    text-shadow:0 0 30px rgba(56,225,255,.35);letter-spacing:.02em}
+  .tag{font-family:'miraFONT Linear',monospace;font-size:clamp(15px,2.6vw,24px);color:var(--amber);margin-top:14px}
+  .sub{color:var(--dim);max-width:640px;margin:22px auto 0;font-size:17px}
+  .cc0-badge{display:inline-block;margin-top:26px;border:1px solid var(--green);color:var(--green);
+    border-radius:99px;padding:8px 20px;font:600 14px/1 inherit;letter-spacing:.06em}
+  .cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:14px 28px;border-radius:10px;font-weight:700;text-decoration:none;font-size:16px}
+  .btn-main{background:var(--cyan);color:#04121a;box-shadow:0 0 24px rgba(56,225,255,.35)}
+  .btn-ghost{border:1px solid var(--line);color:var(--txt);background:var(--panel)}
+
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  h2{font-family:'miraFONT',monospace;font-weight:700;color:var(--cyan);font-size:clamp(22px,4vw,32px);margin-bottom:8px}
+  .lead{color:var(--dim);margin-bottom:34px;max-width:720px}
+
+  /* textures */
+  .tex{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .card h3{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+  .sample{font-size:34px;line-height:1.25;overflow-wrap:anywhere}
+  .sample small{display:block;font-size:17px;color:var(--dim);margin-top:6px}
+  .f-dots{font-family:'miraFONT',monospace}
+  .f-linear{font-family:'miraFONT Linear',monospace}
+  .f-spline{font-family:'miraFONT Spline',monospace}
+
+  /* cuts */
+  .cuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+  .cut{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:24px;white-space:nowrap;overflow:hidden}
+  .cut span{display:block;font:500 11px/1 -apple-system,sans-serif;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+
+  /* code */
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto;
+    font:14px/1.7 'miraFONT Linear',ui-monospace,monospace;color:var(--green)}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+
+  footer{border-top:1px solid var(--line);padding:44px 0;text-align:center;color:var(--dim);font-size:14px}
+  footer .sig{font-family:'miraFONT Linear',monospace;color:var(--amber);margin-bottom:8px;font-size:16px}
+</style>
+</head>
+<body>
+
+<div class="lang-switch" role="group" aria-label="Language">
+  <button id="btn-it" onclick="setLang('it')">IT</button>
+  <button id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="logo">miraFONT</div>
+    <div class="tag">where data speaks C.</div>
+
+    <p class="sub" lang-it>Tipografia digitale per un Digital Runtime. Ogni glifo nasce da una
+      matrice di nodi 5×7 — nessun outline di terze parti. 21 tagli, 3 texture, dal desktop al web
+      fino ai display OLED su ESP32.</p>
+    <p class="sub" lang-en>Digital typography for a Digital Runtime. Every glyph is born from a
+      5×7 node matrix — no third-party outlines. 21 cuts, 3 textures, from desktop to web
+      down to OLED displays on ESP32.</p>
+
+    <div class="cc0-badge" lang-it>LICENZA CC0 — PUBBLICO DOMINIO, È DI TUTTI</div>
+    <div class="cc0-badge" lang-en>CC0 LICENSED — PUBLIC DOMAIN, IT BELONGS TO EVERYONE</div>
+
+    <div class="cta">
+      <a class="btn btn-main" href="miraFONT-specimen.html">
+        <span lang-it>Specimen interattivo + simulatore OLED</span>
+        <span lang-en>Interactive specimen + OLED simulator</span>
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/umeglio/miraFONT">
+        <span lang-it>Scarica da GitHub</span>
+        <span lang-en>Download on GitHub</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2 lang-it>Tre texture, un DNA</h2>
+    <h2 lang-en>Three textures, one DNA</h2>
+    <p class="lead" lang-it>La stessa matrice 5×7 interpretata in tre modi diversi. Questi campioni
+      usano i veri file del font, caricati da <code>fonts/miraFONT.css</code>.</p>
+    <p class="lead" lang-en>The same 5×7 matrix rendered three different ways. These samples use the
+      actual font files, loaded from <code>fonts/miraFONT.css</code>.</p>
+
+    <div class="tex">
+      <div class="card">
+        <h3>Dots</h3>
+        <div class="sample f-dots">AaBbCc 0123<small lang-it>La matrice di nodi allo stato puro</small><small lang-en>The raw node matrix</small></div>
+      </div>
+      <div class="card">
+        <h3>Linear</h3>
+        <div class="sample f-linear">AaBbCc 0123<small lang-it>Nodi fusi in un tratto continuo</small><small lang-en>Nodes merged into a continuous stroke</small></div>
+      </div>
+      <div class="card">
+        <h3>Spline</h3>
+        <div class="sample f-spline">AaBbCc 0123<small lang-it>Interpolazione monolinea morbida</small><small lang-en>Smooth monoline interpolation</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 lang-it>21 tagli</h2>
+    <h2 lang-en>21 cuts</h2>
+    <p class="lead" lang-it>Pesi Light · Regular · Bold · Black, più Italic, Compressed, Narrow e
+      Double Strike — in ogni texture, ognuno in formato .otf, .ttf e .woff.</p>
+    <p class="lead" lang-en>Light · Regular · Bold · Black weights, plus Italic, Compressed, Narrow and
+      Double Strike — across every texture, each shipped as .otf, .ttf and .woff.</p>
+
+    <div class="cuts">
+      <div class="cut f-dots" style="font-weight:300"><span>Light</span>Hamburgefonstiv</div>
+      <div class="cut f-dots"><span>Regular</span>Hamburgefonstiv</div>
+      <div class="cut f-dots" style="font-weight:700"><span>Bold</span>Hamburgefonstiv</div>
+      <div class="cut f-dots" style="font-weight:900"><span>Black</span>Hamburgefonstiv</div>
+      <div class="cut f-dots" style="font-style:italic"><span>Italic</span>Hamburgefonstiv</div>
+      <div class="cut" style="font-family:'miraFONT Compressed',monospace"><span>Compressed</span>Hamburgefonstiv</div>
+      <div class="cut" style="font-family:'miraFONT Narrow',monospace"><span>Narrow</span>Hamburgefonstiv</div>
+      <div class="cut" style="font-family:'miraFONT Double Strike',monospace"><span>Double Strike</span>Hamburgefonstiv</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 lang-it>Usalo subito</h2>
+    <h2 lang-en>Use it right now</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3 lang-it>Desktop</h3><h3 lang-en>Desktop</h3>
+        <p lang-it><b>Windows</b>: doppio clic su un .ttf/.otf → Installa<br>
+           <b>macOS</b>: doppio clic → Installa font<br>
+           <b>Linux</b>: copia in <code>~/.local/share/fonts/</code> poi <code>fc-cache&nbsp;-f</code></p>
+        <p lang-en><b>Windows</b>: double-click a .ttf/.otf → Install<br>
+           <b>macOS</b>: double-click → Install Font<br>
+           <b>Linux</b>: copy to <code>~/.local/share/fonts/</code> then <code>fc-cache&nbsp;-f</code></p>
+      </div>
+      <div class="card">
+        <h3>Web</h3>
+<pre>&lt;link rel="stylesheet"
+      href="fonts/miraFONT.css"&gt;
+
+body { font-family:'miraFONT'; }
+h1   { font-family:'miraFONT Spline'; }</pre>
+      </div>
+      <div class="card">
+        <h3>ESP32 / OLED</h3>
+        <p lang-it>Nella cartella <code>esp32/</code>: font in C ANSI, driver SSD1306 e demo per
+          Arduino ed ESP-IDF (display ELEGOO 0,96"). Provalo nel
+          <a href="miraFONT-specimen.html">simulatore OLED dello specimen</a>.</p>
+        <p lang-en>In the <code>esp32/</code> folder: ANSI C font, SSD1306 driver and demos for
+          Arduino and ESP-IDF (ELEGOO 0.96" displays). Try it in the
+          <a href="miraFONT-specimen.html">specimen's OLED simulator</a>.</p>
+      </div>
+      <div class="card">
+        <h3 lang-it>Licenza CC0</h3><h3 lang-en>CC0 License</h3>
+        <p lang-it>Pubblico dominio: usalo, modificalo, vendilo, incorporalo — <b>senza chiedere
+          permesso e senza attribuzione</b>. Una menzione a miraNET è gradita ma non dovuta.</p>
+        <p lang-en>Public domain: use it, modify it, sell it, embed it — <b>no permission needed,
+          no attribution required</b>. A mention of miraNET is appreciated but never owed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="sig">miraFONT · where data speaks C.</div>
+  <div lang-it>miraNET / Umberto Meglio, 2026 — rilasciato in CC0 1.0 Universal · <a href="https://github.com/umeglio/miraFONT">GitHub</a></div>
+  <div lang-en>miraNET / Umberto Meglio, 2026 — released under CC0 1.0 Universal · <a href="https://github.com/umeglio/miraFONT">GitHub</a></div>
+</footer>
+
+<script>
+function setLang(l){
+  document.documentElement.setAttribute('data-lang', l);
+  document.documentElement.lang = l;
+  document.getElementById('btn-it').classList.toggle('on', l==='it');
+  document.getElementById('btn-en').classList.toggle('on', l==='en');
+  try{ localStorage.setItem('mirafont-lang', l); }catch(e){}
+}
+var saved = null;
+try{ saved = localStorage.getItem('mirafont-lang'); }catch(e){}
+setLang(saved || ((navigator.language||'').toLowerCase().indexOf('it')===0 ? 'it' : 'en'));
+</script>
+</body>
+</html>
