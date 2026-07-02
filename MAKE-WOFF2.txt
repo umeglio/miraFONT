@@ -1,0 +1,19 @@
+Generate .woff2  (optional - smaller web files)
+===============================================
+.woff2 is a web-only compressed format. The included .woff / .ttf / .otf already work on
+every OS and browser, so this step is optional.
+
+Reliable, offline (Python):
+  pip install fonttools brotli
+
+  # a single file:
+  fonttools ttLib.woff2 compress fonts/Dots/miraFONT-Regular-Dots.ttf
+
+  # ALL of them at once (macOS / Linux):
+  find fonts -name "*.ttf" -exec fonttools ttLib.woff2 compress {} \;
+
+  # ALL of them at once (Windows PowerShell):
+  Get-ChildItem -Recurse fonts -Filter *.ttf | ForEach-Object { fonttools ttLib.woff2 compress $_.FullName }
+
+This writes a .woff2 next to each .ttf. Then add it to miraFONT.css above the .woff line:
+  url('....woff2') format('woff2'),
