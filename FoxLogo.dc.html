@@ -1,0 +1,30 @@
+<!-- FoxLogo — the miraNET fox mark as a reusable Design Component.
+     Fetched at runtime by <dc-import name="FoxLogo"> in the specimen pages.
+     Hover the mark: it highlights and animates. -->
+<x-dc>
+<div class="fx-mark" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:pointer">
+  <svg viewBox="0 0 100 100" width="100%" height="100%" style="overflow:visible;display:block">
+    <style>
+      .fx-mark svg{filter:drop-shadow(0 0 10px rgba(47,208,255,.35));transition:filter .35s ease}
+      .fx-mark:hover svg{filter:drop-shadow(0 0 24px rgba(47,208,255,.85));animation:fx-bob 1.6s ease-in-out infinite}
+      .fx-mark .fx-body{transition:fill .35s ease}
+      .fx-mark:hover .fx-body{fill:rgba(47,208,255,.18)}
+      .fx-mark .fx-eye{transition:fill .35s ease}
+      .fx-mark:hover .fx-eye{fill:#ffffff}
+      .fx-mark .fx-nose{transition:fill .35s ease}
+      .fx-mark:hover .fx-nose{fill:#8ce8ff}
+      @keyframes fx-bob{0%,100%{transform:translateY(0) rotate(0deg)} 25%{transform:translateY(-2.5px) rotate(-1.2deg)} 75%{transform:translateY(-1px) rotate(1.2deg)} }
+    </style>
+    <defs>
+      <linearGradient id="fxg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8ecff"></stop><stop offset="1" stop-color="#1e7bff"></stop></linearGradient>
+    </defs>
+    <polygon class="fx-body" points="50,94 73,67 86,56 73,48 79,9 53,34 50,38 47,34 21,9 27,48 14,56 27,67" fill="rgba(47,208,255,.07)" stroke="url(#fxg)" stroke-width="2.6" stroke-linejoin="round"></polygon>
+    <polygon points="28,17 45,34 36,33" fill="rgba(47,208,255,.30)"></polygon>
+    <polygon points="72,17 55,34 64,33" fill="rgba(47,208,255,.30)"></polygon>
+    <polyline points="25,61 33,33 50,54 67,33 75,61" fill="none" stroke="url(#fxg)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    <polygon class="fx-eye" points="32,46 45,51 33,56" fill="#bff0ff"></polygon>
+    <polygon class="fx-eye" points="68,46 55,51 67,56" fill="#bff0ff"></polygon>
+    <polygon class="fx-nose" points="50,62 55,67 50,73 45,67" fill="#2fd0ff"></polygon>
+  </svg>
+</div>
+</x-dc>
