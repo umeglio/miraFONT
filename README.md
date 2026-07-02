@@ -16,7 +16,7 @@
 
 *The site itself is set 100% in miraFONT — every heading, label and paragraph. / Il sito stesso è composto al 100% in miraFONT — ogni titolo, etichetta e paragrafo.*
 
-[English](#-english) · [Italiano](#-italiano)
+[English](#-english) · [Italiano](#-italiano) · 📖 [Guida completa / Full guide (IT)](GUIDA.md)
 
 </div>
 
