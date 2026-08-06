@@ -1,0 +1,153 @@
+name: tmp-mira-final-v2
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/tmp-mira-final-v2.yml'
+      - 'mira-final-v2/payload/**'
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct frozen source payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          cat mira-final-v2/payload/xz_b64_[0-9][0-9] | base64 -d > work/finale-source.tar.xz
+          echo 'bbb42a0394e603af57daa3302245aa4de28d589c3672824d86149e4a5ddb9367  work/finale-source.tar.xz' | sha256sum --check --strict
+          tar -xJf work/finale-source.tar.xz -C work
+          test "$(sha256sum work/finale/prereg/PREREG_FINALE_F192_GRU_v2.md | cut -d' ' -f1)" = '3cb7f32dd38ef64ba3b5fd3255cd0ebe3ea390d0ac7c6233f2e4c308c2c95edb'
+
+      - name: Fetch and verify byte-exact ELTeC archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work/finale
+          mkdir -p input logs manifests
+          url='https://zenodo.org/api/records/3543333/files/COST-ELTeC%2FELTeC-ita-v0.3.0.zip/content'
+          out='input/COST-ELTeC_ELTeC-ita-v0.3.0.zip'
+          curl --fail --location --retry 8 --retry-all-errors --connect-timeout 30 --max-time 900 "$url" -o "$out"
+          echo '9195844caf7e1d61e7b44aaa00743c15  input/COST-ELTeC_ELTeC-ita-v0.3.0.zip' | md5sum --check --strict | tee logs/archive_md5.log
+          echo '000c804322a19582b40ce6779d2162b1a5c0c1f66eb825b31c6901c58929b529  input/COST-ELTeC_ELTeC-ita-v0.3.0.zip' | sha256sum --check --strict | tee logs/archive_sha256.log
+          stat --printf='archive_bytes=%s\n' "$out" | tee logs/archive_size.log
+
+      - name: Import exact 34-work source-disjoint corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work/finale
+          python3 tools/verify_and_import_eltec.py input/COST-ELTeC_ELTeC-ita-v0.3.0.zip --out data | tee logs/import.log
+          test "$(sha256sum data/train.txt | cut -d' ' -f1)" = 'f090c0c3124aa8545ca941a7f698fd97dc2eec8cc078580ad701b3e2c9169be9'
+          test "$(sha256sum data/tune.txt | cut -d' ' -f1)" = '21ec14635891478c03b7e4775d5e8c041d01717e98dde59a1f6a4bbf9600dbb6'
+          test "$(sha256sum data/test_dev.txt | cut -d' ' -f1)" = '93d1478e82f76dd9308469b9addc2f93417996a5b97c1848511c072988c1a5f9'
+          test "$(sha256sum data/test_confirm.txt | cut -d' ' -f1)" = '4d699121243b98cbc0f11d38054ac5b1b741ed289a45dbebb3156aba94e7fb60'
+
+      - name: Compile and verify frozen native-C runner in matching Debian toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -v "$PWD/work/finale:/work/finale" -w /work/finale/project debian:13-slim bash -lc '
+            set -euo pipefail
+            apt-get update -qq
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends gcc libc6-dev binutils libgomp1 ca-certificates >/dev/null
+            gcc --version | head -n1 | tee ../logs/compiler.txt
+            ld --version | head -n1 | tee ../logs/linker.txt
+            mkdir -p build
+            gcc -O3 -std=c17 -Wall -Wextra -Werror -pedantic -fopenmp -march=haswell -mtune=haswell -ffp-contract=fast -Iinclude -Isrc \
+              src/finale_runner.c src/mira_math.c src/mira_tokenizer.c src/mira_model.c src/mira_sampler.c src/mira_sonata.c src/mira_symbolic.c src/mira_retrieval.c src/mira_index.c src/mira_benchmark.c src/mira_gru.c src/mira_diagnostics.c -lm -o build/mira_finale_runner
+            gcc -O3 -std=c17 -Wall -Wextra -Werror -pedantic -fopenmp -march=haswell -mtune=haswell -ffp-contract=fast -Iinclude -Isrc \
+              src/finale_tokenizer.c src/mira_math.c src/mira_tokenizer.c -lm -o build/finale_tokenizer
+          '
+          cd work/finale
+          echo '21b40cac714f94954c849d0e8b55c1036494363106b3c30334df4a9640871610  project/build/mira_finale_runner' | sha256sum --check --strict | tee logs/runner_sha256.log
+
+      - name: Build TRAIN-only tokenizer and frozen token/window files
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -e OMP_NUM_THREADS=4 -e OMP_DYNAMIC=FALSE -v "$PWD/work/finale:/work/finale" -w /work/finale debian:13-slim bash -lc '
+            set -euo pipefail
+            apt-get update -qq
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends libgomp1 >/dev/null
+            mkdir -p tokenizer prepared orders
+            ./project/build/finale_tokenizer data/train.txt tokenizer/tokenizer.bin tokenizer/pieces.tsv data/tune.txt data/test_dev.txt data/test_confirm.txt | tee logs/tokenizer.log
+            ./project/build/mira_finale_runner prepare tokenizer/tokenizer.bin data/train.txt data/tune.txt data/test_dev.txt data/test_confirm.txt prepared
+            for seed in 137 1972 2718 3141 1618 2026 5772 8119; do
+              ./project/build/mira_finale_runner windows prepared/train.tok orders/train_order_${seed}.bin all ${seed}
+            done
+            ./project/build/mira_finale_runner windows prepared/tune.tok orders/tune_windows.bin all 0
+            ./project/build/mira_finale_runner windows prepared/test_dev.tok orders/test_dev_windows.bin test 0
+            ./project/build/mira_finale_runner windows prepared/test_confirm.tok orders/test_confirm_windows.bin test 0
+          '
+          cd work/finale
+          test "$(sha256sum tokenizer/tokenizer.bin | cut -d' ' -f1)" = 'bce8d5ed69bd128466bc2a72db95a7c593388fa8af26aca9f65a526ee67c1785'
+          test "$(sha256sum prepared/train.tok | cut -d' ' -f1)" = 'b746b1cdfd876b1b798c024b671de08332b5be5edf0235662e3338e165f5c9bf'
+          test "$(sha256sum prepared/tune.tok | cut -d' ' -f1)" = '30dad45d38401c60fdb28bd985510b3873691ef4948f470789f39a9aaab5aef7'
+          test "$(sha256sum orders/tune_windows.bin | cut -d' ' -f1)" = '2e8bcb40f5e71a80dd4dde99940cfe8b268b667013036b832e9e37b5388fc03f'
+          test "$(sha256sum orders/test_dev_windows.bin | cut -d' ' -f1)" = 'af24fcfc9720b7ec84fc1c8acafe1d6af9b557b9c9e16e3f0ccb2cbdcf9005e9'
+          test "$(sha256sum orders/test_confirm_windows.bin | cut -d' ' -f1)" = 'e6b16182fbed870e207a0ea118832681aedb11dc292d13f3483c30286d1e0a7f'
+          find project/src project/include project/build tokenizer prepared orders prereg logs -type f -print0 | sort -z | xargs -0 sha256sum > manifests/PREPARED_SHA256.txt
+
+      - name: Minimize and upload frozen prepared payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work/finale
+          rm -f input/COST-ELTeC_ELTeC-ita-v0.3.0.zip data/train.txt data/tune.txt data/test_dev.txt data/test_confirm.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finale-prepared
+          path: work/finale
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 3
+
+  train:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [f192, gru]
+        seed: [1972, 2718, 3141, 1618, 2026, 5772, 8119]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: finale-prepared
+          path: work
+      - name: Run preregistered long training to convergence
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="results/long/${{ matrix.kind }}_${{ matrix.seed }}"
+          mkdir -p "work/finale/$out"
+          docker run --rm --cpus 4 \
+            -e OMP_NUM_THREADS=4 -e OMP_DYNAMIC=FALSE -e OMP_PROC_BIND=close -e OMP_PLACES=cores \
+            -v "$PWD/work:/work" -w /work/finale debian:13-slim bash -lc "
+              set -euo pipefail
+              apt-get update -qq
+              DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends libgomp1 >/dev/null
+              ./project/build/mira_finale_runner train ${{ matrix.kind }} long tokenizer/tokenizer.bin prepared/train.tok prepared/tune.tok orders/train_order_${{ matrix.seed }}.bin orders/tune_windows.bin 0.0048 ${{ matrix.seed }} $out $out/best.bin 2>&1 | tee $out/console.log
+            "
+          test -s "work/finale/$out/result.txt"
+          grep -q '^early_stopped=1$' "work/finale/$out/result.txt"
+          grep -q '^profile_pass=1$' "work/finale/$out/result.txt"
+          sha256sum "work/finale/$out/best.bin" > "work/finale/$out/best.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: long-${{ matrix.kind }}-${{ matrix.seed }}
+          path: work/finale/results/long/${{ matrix.kind }}_${{ matrix.seed }}
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 1
