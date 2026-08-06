@@ -1,0 +1,52 @@
+{
+  "archive_md5": "9195844caf7e1d61e7b44aaa00743c15",
+  "classification": "execution retry forced by preregistered profiler invalidation; no scientific setting changed",
+  "created_utc": "2026-08-06T07:37:40.854596+00:00",
+  "invalid_attempt": {
+    "abort_evidence_sha256": "f5aebad0620a05decdc62b26ef8213a7b39de1cfe2672e1c25fd55219ab2d64e",
+    "five_co_resident_single_thread_workers": true,
+    "no_architecture_or_hyperparameter_decision_taken_from_partial_metrics": true,
+    "objective_profiler_failures": [
+      {"current_block": 13, "current_spu": 0.044419732094, "previous_block": 12, "previous_spu": 0.045814671516, "profiler_sha256": "cde37207abf95dd93f9533c16d6c28790014af302af384d2bf8ffb23f796b424", "seed": 1972},
+      {"current_block": 39, "current_spu": 0.047335104942, "previous_block": 38, "previous_spu": 0.045998446941, "profiler_sha256": "200ffa804f5c4906a4e74f34a91495ab1f18ac6bc9b42a6b06ed1e26804bcc40", "seed": 2718},
+      {"current_block": 24, "current_spu": 0.048920614719, "previous_block": 23, "previous_spu": 0.045885813236, "profiler_sha256": "7ff9fa742b84bc45d80c3165bcc3482f093f729271a186fc1d1dfb327b4d3aae", "seed": 3141}
+    ],
+    "partial_half_epoch_metrics_emitted": {"f192": 0, "gru": 2},
+    "partial_metrics_excluded": true,
+    "quarantine_path": "quarantine_profiler_failed_attempt_20260806T073658Z"
+  },
+  "lr_lock_sha256": "3a51f4190423602dc712a11cec3b4fc249b3817ef52654677ccae06dc3fb97d1",
+  "pre_tuning_lock_sha256": "22b33ab830f6d28daaa510558a39ed3922da7ec3da0ce79c4bd7f59464c28a0d",
+  "prereg_v2_sha256": "3cb7f32dd38ef64ba3b5fd3255cd0ebe3ea390d0ac7c6233f2e4c308c2c95edb",
+  "retry_runtime": {
+    "cpu_affinity": "0-3",
+    "exact_archive_tokenizer_orders_lrs_seeds": true,
+    "exact_locked_binary": true,
+    "max_parallel_jobs": 14,
+    "omp_dynamic": false,
+    "one_experimental_run_per_vm": true,
+    "openmp_threads": 4,
+    "provider": "GitHub-hosted ubuntu-latest isolated matrix job",
+    "required_logical_cpus": 4,
+    "timeout_minutes": 360
+  },
+  "retry_training_started": false,
+  "runner_sha256": "21b40cac714f94954c849d0e8b55c1036494363106b3c30334df4a9640871610",
+  "schema": "mira-finale-f192-gru-v2-runtime-retry-lock-v1",
+  "selected_lr": {"f192": 0.0048, "gru": 0.0048},
+  "status": "FROZEN_BEFORE_TECHNICAL_RETRY_TRAINING",
+  "tokenizer_sha256": "bce8d5ed69bd128466bc2a72db95a7c593388fa8af26aca9f65a526ee67c1785",
+  "unchanged": [
+    "all model equations and parameter counts",
+    "all seven seeds",
+    "training window order per seed",
+    "selected learning rates",
+    "minimum 8 epochs",
+    "half-epoch TUNE evaluation",
+    "patience 3",
+    "maximum 30 epochs",
+    "profiler rule",
+    "DEV/CONFIRM windows and gate",
+    "content token definition"
+  ]
+}
