@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/tmp-check-mira-payload.yml'
       - 'mira-final-v2/payload/xz_b64_*'
+      - 'mira-final-v2/payload/repair/*'
 permissions:
   contents: read
 jobs:
@@ -15,10 +16,13 @@ jobs:
       - shell: bash
         run: |
           set -euo pipefail
-          for f in mira-final-v2/payload/xz_b64_[0-9][0-9]; do
-            printf '%s bytes=%s gitblob=' "$f" "$(stat -c%s "$f")"
-            git hash-object "$f"
-          done
-          cat mira-final-v2/payload/xz_b64_[0-9][0-9] | base64 -d > /tmp/source.tar.xz
-          sha256sum /tmp/source.tar.xz
-          xz -t /tmp/source.tar.xz || true
+          {
+            cat mira-final-v2/payload/xz_b64_00
+            cat mira-final-v2/payload/repair/xz_01_0 mira-final-v2/payload/repair/xz_01_1
+            cat mira-final-v2/payload/xz_b64_02
+            cat mira-final-v2/payload/repair/xz_03_0 mira-final-v2/payload/repair/xz_03_1
+            cat mira-final-v2/payload/xz_b64_04 mira-final-v2/payload/xz_b64_05 mira-final-v2/payload/xz_b64_06 mira-final-v2/payload/xz_b64_07 mira-final-v2/payload/xz_b64_08 mira-final-v2/payload/xz_b64_09 mira-final-v2/payload/xz_b64_10 mira-final-v2/payload/xz_b64_11 mira-final-v2/payload/xz_b64_12 mira-final-v2/payload/xz_b64_13 mira-final-v2/payload/xz_b64_14
+          } | base64 -d > /tmp/source.tar.xz
+          echo '013ce7a0b7023d849b01a25ca88df37ab10ac569acb99fecb2965a0380eb850c  /tmp/source.tar.xz' | sha256sum --check --strict
+          xz -t /tmp/source.tar.xz
+          echo SOURCE_PAYLOAD_REPAIR=PASS
