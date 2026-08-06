@@ -1,0 +1,37 @@
+name: tmp-fetch-eltec-final
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/tmp-fetch-eltec-final.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  fetch-exact-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download exact Zenodo archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://zenodo.org/api/records/3543333/files/COST-ELTeC%2FELTeC-ita-v0.3.0.zip/content'
+          out='COST-ELTeC_ELTeC-ita-v0.3.0.zip'
+          curl --fail --location --retry 8 --retry-all-errors --connect-timeout 30 --max-time 600 "$url" -o "$out"
+          printf '%s  %s\n' '9195844caf7e1d61e7b44aaa00743c15' "$out" | md5sum --check --strict
+          sha256sum "$out" | tee ELTEC_SHA256.txt
+          stat --printf='bytes=%s\n' "$out" | tee ELTEC_SIZE.txt
+      - name: Upload verified archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: eltec-v0.3.0-md5-verified
+          path: |
+            COST-ELTeC_ELTeC-ita-v0.3.0.zip
+            ELTEC_SHA256.txt
+            ELTEC_SIZE.txt
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
