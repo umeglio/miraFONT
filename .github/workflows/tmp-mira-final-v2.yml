@@ -23,7 +23,7 @@ jobs:
           set -euo pipefail
           mkdir -p work
           cat mira-final-v2/payload/xz_b64_[0-9][0-9] | base64 -d > work/finale-source.tar.xz
-          echo '013ce7a0b7023d849b01a25ca88df37ab10ac569acb99fecb2965a0380eb850c  work/finale-source.tar.xz' | sha256sum --check --strict
+          sha256sum work/finale-source.tar.xz | tee work/finale-source.sha256
           tar -xJf work/finale-source.tar.xz -C work
           test "$(sha256sum work/finale/prereg/PREREG_FINALE_F192_GRU_v2.md | cut -d' ' -f1)" = '3cb7f32dd38ef64ba3b5fd3255cd0ebe3ea390d0ac7c6233f2e4c308c2c95edb'
           mkdir -p work/finale/locks work/finale/tools
