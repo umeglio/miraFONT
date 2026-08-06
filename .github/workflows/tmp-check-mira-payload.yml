@@ -1,0 +1,24 @@
+name: tmp-check-mira-payload
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/tmp-check-mira-payload.yml'
+      - 'mira-final-v2/payload/xz_b64_*'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - shell: bash
+        run: |
+          set -euo pipefail
+          for f in mira-final-v2/payload/xz_b64_[0-9][0-9]; do
+            printf '%s bytes=%s gitblob=' "$f" "$(stat -c%s "$f")"
+            git hash-object "$f"
+          done
+          cat mira-final-v2/payload/xz_b64_[0-9][0-9] | base64 -d > /tmp/source.tar.xz
+          sha256sum /tmp/source.tar.xz
+          xz -t /tmp/source.tar.xz || true
