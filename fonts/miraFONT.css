@@ -189,3 +189,40 @@
       url('Spline/miraFONT-DoubleStrike-Spline.otf') format('opentype');
 }
 
+/* miraFONT Text - taglio da lettura: stessa matrice, proporzioni da testo, larghezze proporzionali */
+
+@font-face{
+  font-family:'miraFONT Text';
+  font-style:normal;
+  font-weight:400;
+  src:url('Text/miraFONT-Regular-Text.woff') format('woff'),
+      url('Text/miraFONT-Regular-Text.ttf') format('truetype'),
+      url('Text/miraFONT-Regular-Text.otf') format('opentype');
+}
+
+@font-face{
+  font-family:'miraFONT Text';
+  font-style:normal;
+  font-weight:700;
+  src:url('Text/miraFONT-Bold-Text.woff') format('woff'),
+      url('Text/miraFONT-Bold-Text.ttf') format('truetype'),
+      url('Text/miraFONT-Bold-Text.otf') format('opentype');
+}
+
+@font-face{
+  font-family:'miraFONT Text';
+  font-style:italic;
+  font-weight:400;
+  src:url('Text/miraFONT-Italic-Text.woff') format('woff'),
+      url('Text/miraFONT-Italic-Text.ttf') format('truetype'),
+      url('Text/miraFONT-Italic-Text.otf') format('opentype');
+}
+
+@font-face{
+  font-family:'miraFONT Text';
+  font-style:italic;
+  font-weight:700;
+  src:url('Text/miraFONT-BoldItalic-Text.woff') format('woff'),
+      url('Text/miraFONT-BoldItalic-Text.ttf') format('truetype'),
+      url('Text/miraFONT-BoldItalic-Text.otf') format('opentype');
+}

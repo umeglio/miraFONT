@@ -1,12 +1,14 @@
 miraFONT — native typeface of the miraNET Digital Runtime (2026)
 ================================================================
 
-21 cuts x 3 formats (.otf .ttf .woff).
+25 cuts x 3 formats (.otf .ttf .woff).
 
 Folders:
   Dots/    dotted node matrix — Light, Regular, Bold, Black + Italic/Compressed/Narrow/Double Strike
   Linear/  merged single-contour stroke (boolean-union) — uniform, best for small/body text
   Spline/  smooth monoline (the miraNET linear-spline look)
+  Text/    reading cut — same node matrix, taller text proportions, proportional widths,
+           uniform stroke: Regular, Bold, Italic, Bold Italic. Best for paragraphs and UI text
 
 INSTALL
   Windows  double-click the .ttf or .otf -> Install (or drop into C:\Windows\Fonts)

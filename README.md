@@ -8,7 +8,7 @@
 
 [![License: CC0 1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](LICENSE)
 [![Formats](https://img.shields.io/badge/formats-OTF%20·%20TTF%20·%20WOFF-blue.svg)](fonts/)
-[![Cuts](https://img.shields.io/badge/cuts-21-orange.svg)](fonts/)
+[![Cuts](https://img.shields.io/badge/cuts-25-orange.svg)](fonts/)
 [![ESP32 ready](https://img.shields.io/badge/ESP32-SSD1306%20OLED-green.svg)](esp32/)
 [![miraNET DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19402571.svg)](https://doi.org/10.5281/zenodo.19402571)
 
@@ -32,17 +32,20 @@ It is released under **[CC0 1.0 Universal](LICENSE)** (public domain dedication)
 
 > ▶ **Coming up** — the **[miraNET Digital Runtime](https://doi.org/10.5281/zenodo.19402571)** is built on miraFONT: this is its native typeface. DOI: [10.5281/zenodo.19402571](https://doi.org/10.5281/zenodo.19402571)
 
-### The family — 21 cuts × 3 formats
+### The family — 25 cuts × 3 formats
 
-Three **textures**, each rendering the node matrix in a different way:
+Three **textures**, each rendering the node matrix in a different way, plus a **reading cut**:
 
 | Texture | Character |
 |---|---|
 | **Dots** | the raw node matrix — pure display/terminal feel |
 | **Linear** | nodes merged into a continuous stroke |
 | **Spline** | smooth monoline interpolation |
+| **Text** | *reading cut*: same matrix with taller text proportions, proportional widths and a uniform stroke — for paragraphs and UI text (Regular, Bold, Italic, Bold Italic) |
 
-Available **weights**: Light, Regular, Bold, Black — plus **styles**: Italic, Compressed, Narrow, Double Strike. Every cut ships as `.otf`, `.ttf` and `.woff` (optional `.woff2`: see [MAKE-WOFF2.txt](MAKE-WOFF2.txt)).
+Available **weights**: Light, Regular, Bold, Black — plus **styles**: Italic, Compressed, Narrow, Double Strike. <p align="center"><img src="fonts/Text/specimen.png" alt="miraFONT Text compared with Spline and Linear" width="720"></p>
+
+Every cut ships as `.otf`, `.ttf` and `.woff` (optional `.woff2`: see [MAKE-WOFF2.txt](MAKE-WOFF2.txt)).
 
 ### Install
 
@@ -58,6 +61,7 @@ Available **weights**: Light, Regular, Bold, Black — plus **styles**: Italic, 
 body { font-family: 'miraFONT', monospace; }          /* Dots, 300/400/700/900 + italic */
 h1   { font-family: 'miraFONT Spline'; }              /* smooth monoline */
 code { font-family: 'miraFONT Linear'; }              /* merged stroke   */
+p    { font-family: 'miraFONT Text'; }                /* reading cut     */
 ```
 
 ### ESP32 / embedded
@@ -67,7 +71,8 @@ The [`esp32/`](esp32/) folder contains the font as **ANSI C**, an **SSD1306 OLED
 ### Repository map
 
 ```
-fonts/                  21 cuts × 3 formats in Dots/ Linear/ Spline/ + miraFONT.css
+fonts/                  25 cuts × 3 formats in Dots/ Linear/ Spline/ Text/ + miraFONT.css
+tools/build-text.py     generator of the Text reading cut (fonttools + skia-pathops)
 esp32/                  ANSI C font + SSD1306 driver + Arduino & ESP-IDF demos
 miraFONT-specimen.html  full interactive specimen + live OLED simulator (offline OK)
 index.html              presentation site (GitHub Pages)
@@ -91,17 +96,20 @@ miraFONT è un carattere tipografico originale nato per il **miraNET Digital Run
 
 > ▶ **In arrivo** — il **[miraNET Digital Runtime](https://doi.org/10.5281/zenodo.19402571)** è interamente basato su miraFONT: questa è la sua tipografia nativa. DOI: [10.5281/zenodo.19402571](https://doi.org/10.5281/zenodo.19402571)
 
-### La famiglia — 21 tagli × 3 formati
+### La famiglia — 25 tagli × 3 formati
 
-Tre **texture**, ognuna interpreta la matrice di nodi in modo diverso:
+Tre **texture**, ognuna interpreta la matrice di nodi in modo diverso, più un **taglio da lettura**:
 
 | Texture | Carattere |
 |---|---|
 | **Dots** | la matrice di nodi allo stato puro — feeling display/terminale |
 | **Linear** | nodi fusi in un tratto continuo |
 | **Spline** | interpolazione monolinea morbida |
+| **Text** | *taglio da lettura*: stessa matrice con proporzioni da testo più alte, larghezze proporzionali e tratto uniforme — per paragrafi e interfacce (Regular, Bold, Italic, Bold Italic) |
 
-**Pesi** disponibili: Light, Regular, Bold, Black — più gli **stili**: Italic, Compressed, Narrow, Double Strike. Ogni taglio è fornito in `.otf`, `.ttf` e `.woff` (`.woff2` opzionale: vedi [MAKE-WOFF2.txt](MAKE-WOFF2.txt)).
+**Pesi** disponibili: Light, Regular, Bold, Black — più gli **stili**: Italic, Compressed, Narrow, Double Strike. <p align="center"><img src="fonts/Text/specimen.png" alt="miraFONT Text a confronto con Spline e Linear" width="720"></p>
+
+Ogni taglio è fornito in `.otf`, `.ttf` e `.woff` (`.woff2` opzionale: vedi [MAKE-WOFF2.txt](MAKE-WOFF2.txt)).
 
 ### Installazione
 
@@ -126,7 +134,8 @@ La cartella [`esp32/`](esp32/) contiene il font in **C ANSI**, un **driver OLED 
 ### Mappa del repository
 
 ```
-fonts/                  21 tagli × 3 formati in Dots/ Linear/ Spline/ + miraFONT.css
+fonts/                  25 tagli × 3 formati in Dots/ Linear/ Spline/ Text/ + miraFONT.css
+tools/build-text.py     generatore del taglio da lettura Text (fonttools + skia-pathops)
 esp32/                  font in C ANSI + driver SSD1306 + demo Arduino ed ESP-IDF
 miraFONT-specimen.html  specimen interattivo completo + simulatore OLED (anche offline)
 index.html              sito di presentazione (GitHub Pages)

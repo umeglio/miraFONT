@@ -21,13 +21,13 @@ Licenza: **CC0 1.0 Universal (pubblico dominio)** · DOI miraNET: [10.5281/zenod
 ## 2. Cos'è miraFONT (testo di presentazione pronto)
 
 **IT** — miraFONT è un carattere tipografico originale nato da una matrice di nodi 5×7,
-senza outline di terze parti. 21 tagli in 3 texture (Dots, Linear, Spline), dal desktop
+senza outline di terze parti. 25 tagli in 3 texture (Dots, Linear, Spline) più il taglio da lettura Text, dal desktop
 al web fino ai display OLED su ESP32. Rilasciato in CC0 — pubblico dominio: usalo,
 modificalo e ridistribuiscilo liberamente, anche per scopi commerciali, senza attribuzione.
 È di tutti.
 
 **EN** — miraFONT is an original typeface built from a 5×7 node matrix, no third-party
-outlines. 21 cuts in 3 textures, from desktop to ESP32 OLED displays. Released under
+outlines. 25 cuts in 3 textures plus the Text reading cut, from desktop to ESP32 OLED displays. Released under
 CC0 — public domain: free for everyone, any use, no attribution required.
 
 > ▶ **In arrivo / Coming up** — il **miraNET Digital Runtime** è interamente basato su
@@ -36,18 +36,27 @@ CC0 — public domain: free for everyone, any use, no attribution required.
 
 ---
 
-## 3. La famiglia: 21 tagli × 3 formati
+## 3. La famiglia: 25 tagli × 3 formati
 
 **Le tre texture** (stessa matrice 5×7, tre interpretazioni):
 
 | Texture | Carattere | Uso consigliato |
 |---|---|---|
 | **Dots** | matrice di nodi allo stato puro | look display/terminale, codice |
-| **Linear** | nodi fusi in tratto continuo | testo corrente, massima leggibilità |
+| **Linear** | nodi fusi in tratto continuo | codice e testo monospaziato |
 | **Spline** | monolinea morbida interpolata | titoli e intestazioni |
+| **Text** | stessa matrice, proporzioni da testo, larghezze proporzionali | paragrafi e interfacce: il taglio da lettura |
 
 **Gli stili**: Light · Regular · Bold · Black · Italic · Compressed · Narrow · Double Strike
-(Light/Bold/Black esistono in Dots e Spline; Linear ha Regular + Italic + le varianti).
+(Light/Bold/Black esistono in Dots e Spline; Linear ha Regular + Italic + le varianti;
+Text ha Regular, Bold, Italic e Bold Italic).
+
+**Perché Text.** Dots, Linear e Spline usano lo stesso passo in orizzontale e in verticale: nei titoli
+è il loro carattere, ma nei testi lunghi le lettere risultano basse e larghe. Text riparte dalla
+stessa matrice con un passo verticale 1,3 volte quello orizzontale, larghezze proporzionali
+(i, l, 1 e la punteggiatura occupano solo le colonne usate) e un tratto uniforme. Aggiunge anche
+É Ì Ò Ù á í ó ú ç ñ ä ö ü, virgolette tipografiche, « », –, —, …, €, °, ×, • e corregge la ì,
+che nella matrice originale aveva l'accento attaccato all'asta.
 
 **I formati**: ogni taglio è fornito in `.otf`, `.ttf` e `.woff`.
 Il `.woff2` opzionale si genera con un comando (vedi `MAKE-WOFF2.txt` nel repository).
@@ -90,11 +99,12 @@ Poi nel CSS usi questi nomi di famiglia:
 | `'miraFONT Compressed Spline'` | Spline compresso | 400 |
 | `'miraFONT Narrow Spline'` | Spline stretto | 400 |
 | `'miraFONT Double Strike Spline'` | Spline doppio tratto | 400 |
+| `'miraFONT Text'` | taglio da lettura | 400 · 700 + *italic* |
 
 Esempio completo:
 
 ```css
-body { font-family: 'miraFONT Linear', monospace; }                    /* testo corrente  */
+body { font-family: 'miraFONT Text', sans-serif; }                     /* testo corrente  */
 h1   { font-family: 'miraFONT Spline', monospace; font-weight: 700; } /* titoli          */
 code { font-family: 'miraFONT', monospace; }                           /* stile terminale */
 ```
@@ -109,7 +119,7 @@ Schema URL (63 file totali):
 https://umeglio.github.io/miraFONT/fonts/<Texture>/miraFONT-<Stile>-<Texture>.<estensione>
 ```
 
-- `<Texture>` = `Dots` · `Linear` · `Spline`
+- `<Texture>` = `Dots` · `Linear` · `Spline` · `Text`
 - `<Stile>`   = `Light` · `Regular` · `Bold` · `Black` · `Italic` · `Compressed` · `Narrow` · `DoubleStrike`
 - `<estensione>` = `woff` (web) · `ttf` · `otf` (desktop)
 
@@ -134,6 +144,14 @@ https://umeglio.github.io/miraFONT/fonts/Linear/miraFONT-Italic-Linear.woff
 https://umeglio.github.io/miraFONT/fonts/Linear/miraFONT-Compressed-Linear.woff
 https://umeglio.github.io/miraFONT/fonts/Linear/miraFONT-Narrow-Linear.woff
 https://umeglio.github.io/miraFONT/fonts/Linear/miraFONT-DoubleStrike-Linear.woff
+```
+
+**Text** (taglio da lettura)
+```
+https://umeglio.github.io/miraFONT/fonts/Text/miraFONT-Regular-Text.woff
+https://umeglio.github.io/miraFONT/fonts/Text/miraFONT-Bold-Text.woff
+https://umeglio.github.io/miraFONT/fonts/Text/miraFONT-Italic-Text.woff
+https://umeglio.github.io/miraFONT/fonts/Text/miraFONT-BoldItalic-Text.woff
 ```
 
 **Spline**
